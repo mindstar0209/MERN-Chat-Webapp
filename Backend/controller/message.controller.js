@@ -18,6 +18,7 @@ export const sendMessage = async (req, res) => {
       senderId,
       receiverId,
       message,
+      read : false
     });
     if (newMessage) {
       conversation.messages.push(newMessage._id);
@@ -29,7 +30,7 @@ export const sendMessage = async (req, res) => {
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
-    res.status(201).json(newMessage);
+    res.status(201).json({ status: "success" });
   } catch (error) {
     console.log("Error in sendMessage", error);
     res.status(500).json({ error: "Internal server error" });

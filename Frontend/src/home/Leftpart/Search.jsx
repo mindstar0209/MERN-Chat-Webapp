@@ -7,7 +7,7 @@ function Search() {
   const [search, setSearch] = useState("");
   const [allUsers] = useGetAllUsers();
   const { setSelectedConversation } = useConversation();
-  console.log(allUsers);
+  console.log("allUser in search:", allUsers);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!search) return;

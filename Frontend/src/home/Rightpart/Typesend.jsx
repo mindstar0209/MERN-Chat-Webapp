@@ -6,10 +6,10 @@ function Typesend() {
   const [message, setMessage] = useState("");
   const { loading, sendMessages } = useSendMessage();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     console.log(e);
     e.preventDefault();
-    await sendMessages(message);
+    sendMessages(message);
     setMessage("");
   };
 

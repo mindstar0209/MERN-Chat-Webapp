@@ -6,12 +6,27 @@ const useSendMessage = () => {
   const { messages, setMessage, selectedConversation } = useConversation();
   const sendMessages = async (message) => {
     setLoading(true);
+    const authUser = JSON.parse(localStorage.getItem("ChatApp"));
+
+    const messageObj = {
+      message,
+      receiverId: selectedConversation._id,
+      senderId: authUser.user._id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      _id: Date.now().toString(),
+      __v: 0
+    };
+
+    setMessage([...messages, messageObj]);
     try {
-      const res = await axios.post(
+      await axios.post(
         `/api/message/send/${selectedConversation._id}`,
         { message }
-      );
-      setMessage([...messages, res.data]);
+      ).then((res) => {
+        console.log("res.Data:", res.data)
+      })
+      // setMessage([...messages, res.data]);
       setLoading(false);
     } catch (error) {
       console.log("Error in send messages", error);
