@@ -5,7 +5,7 @@ function Message({ message }) {
   const itsMe = message.senderId === authUser.user._id;
 
   const chatName = itsMe ? " chat-end" : "chat-start";
-  const chatColor = itsMe ? "bg-blue-500" : "";
+  const chatColor = itsMe ? "bg-cyan-900" : "";
 
   const createdAt = new Date(message.createdAt);
   const formattedTime = createdAt.toLocaleTimeString([], {
@@ -14,12 +14,16 @@ function Message({ message }) {
   });
   return (
     <div>
-      <div className="p-4">
+      <div className="px-4 py-1">
         <div className={`chat ${chatName}`}>
-          <div className={`chat-bubble text-white ${chatColor}`}>
+          <div
+            className={`relative chat-bubble pr-[68px] rounded-md text-white ${chatColor}`}
+          >
             {message.message}
+            <div className="absolute bottom-2 right-2 chat-footer text-xs text-gray-400">
+              {formattedTime}
+            </div>
           </div>
-          <div className="chat-footer">{formattedTime}</div>
         </div>
       </div>
     </div>
