@@ -20,6 +20,13 @@ const userSchema = mongoose.Schema({
     profileImage: {
         type:String,
         default: "",
+    },
+    gender: {
+        type: String,
+        required: true
+    },
+    summary: {
+        type: String,
     }
 }, { timestamps: true }); // createdAt & updatedAt
 

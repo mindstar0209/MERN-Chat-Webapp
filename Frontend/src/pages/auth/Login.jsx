@@ -1,12 +1,11 @@
 import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Login() {
-  console.log("hello");
   const [authUser, setAuthUser] = useAuth();
 
   const {

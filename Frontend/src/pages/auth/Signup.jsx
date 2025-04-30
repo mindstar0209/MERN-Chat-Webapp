@@ -1,16 +1,16 @@
 import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Lock, Mail, UserRound } from "lucide-react";
-import useImageProcessing from "../hooks/useImageProcessing";
+import useImageProcessing from "../../hooks/useImageProcessing";
 
 function Signup() {
   const [authUser, setAuthUser] = useAuth();
   const fileInputRef = useRef(null);
-  const { processImage, isProcessing } = useImageProcessing(); // Use the hook
+  const { processImage, isProcessing } = useImageProcessing();
 
   const {
     register,
@@ -20,11 +20,9 @@ function Signup() {
   } = useForm();
 
   const password = watch("password", "");
-  const confirmPassword = watch("confirmPassword", "");
 
   const onSubmit = async (data) => {
     try {
-      // Convert image to base64 if it exists
       let base64Image = "";
       if (data.profileImage?.[0]) {
         try {
@@ -39,8 +37,8 @@ function Signup() {
         fullname: data.fullname,
         email: data.email,
         password: data.password,
-        confirmPassword: data.confirmPassword,
         profileImage: base64Image,
+        gender: data.gender,
       };
 
       const response = await axios.post("/api/user/signup", userData);
@@ -152,6 +150,46 @@ function Signup() {
                 {errors.email && (
                   <span className="text-red-500 text-xs font-semibold">
                     {errors.email.message}
+                  </span>
+                )}
+              </fieldset>
+            </div>
+
+            {/* Gender Section */}
+            <div>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  What is your gender?
+                </legend>
+                <div className="flex gap-8">
+                  <div className="flex items-center gap-2">
+                    Male
+                    <input
+                      type="radio"
+                      value="male"
+                      {...register("gender", {
+                        required: "Gender is required",
+                      })}
+                      className="radio w-5 h-5"
+                      defaultChecked
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    Female
+                    <input
+                      type="radio"
+                      value="female"
+                      {...register("gender", {
+                        required: "Gender is required",
+                      })}
+                      className="radio w-5 h-5"
+                    />
+                  </div>
+                </div>
+                <p className="label">* Required</p>
+                {errors.gender && (
+                  <span className="text-red-500 text-xs font-semibold">
+                    {errors.gender.message}
                   </span>
                 )}
               </fieldset>

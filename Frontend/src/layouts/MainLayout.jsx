@@ -1,15 +1,25 @@
 import React from "react";
-import Logout from "../home/left1/Logout";
-import Left from "../home/Leftpart/Left";
-import Right from "../home/Rightpart/Right";
+import Home from "../pages/Home";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="flex h-screen">
-      <Logout />
-      <Left />
-      <Right />
-    </div>
+    <>
+      <div className="flex flex-col items-center w-full">
+        <div
+          style={{
+            width: "65%",
+          }}
+        >
+          <div className="flex flex-col w-full">
+            <Header />
+            <Navbar />
+          </div>
+          <Home />
+        </div>
+      </div>
+    </>
   );
 };
 

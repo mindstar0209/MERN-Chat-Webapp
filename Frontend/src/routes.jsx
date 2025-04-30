@@ -13,29 +13,25 @@ export const routes = [
     routes: [
       {
         path: "login",
-        element: lazy(() => import("./components/Login")),
+        element: lazy(() => import("./pages/auth/Login")),
       },
       {
         path: "signup",
-        element: lazy(() => import("./components/Signup")),
+        element: lazy(() => import("./pages/auth/Signup")),
       },
     ],
   },
   {
     path: "/*",
     guard: AuthGuard,
-    layout: MainLayout,
+    element: Fragment,
     routes: [
       {
         path: "",
-        element: lazy(() => import("./pages/Message")),
+        guard: MainLayout,
       },
       {
-        path: "chat",
-        element: lazy(() => import("./pages/Message")),
-      },
-      {
-        path: "hub",
+        path: "message",
         element: lazy(() => import("./pages/Message")),
       },
       {
