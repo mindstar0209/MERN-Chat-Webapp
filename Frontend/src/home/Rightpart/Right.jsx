@@ -21,7 +21,7 @@ function Right() {
             <Chatuser />
             <div
               className=" flex-1 overflow-y-auto"
-              style={{ maxHeight: "calc(88vh - 8vh)" }}
+              style={{ maxHeight: "80vh" }}
             >
               <Messages />
             </div>

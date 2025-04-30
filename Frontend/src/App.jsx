@@ -1,42 +1,43 @@
-import React from "react";
-import Left from "./home/Leftpart/Left";
-import Right from "./home/Rightpart/Right";
-import Signup from "./components/Signup";
-import Login from "./components/Login";
-import { useAuth } from "./context/AuthProvider";
+import React, { Suspense, Fragment } from "react";
+import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Logout from "./home/left1/Logout";
+import Loading from "./components/Loading";
+import { routes } from "./routes";
 
-import { Navigate, Route, Routes } from "react-router-dom";
-function App() {
-  const [authUser, setAuthUser] = useAuth();
-  console.log("authUser:", authUser);
-  return (
-    <>
-      <Routes>
+const renderRoutes = (routes = []) => (
+  <Routes>
+    {routes.map((route, i) => {
+      const Guard = route.guard || Fragment;
+      const Layout = route.layout || Fragment;
+      const Element = route.element;
+
+      return (
         <Route
-          path="/"
+          key={i}
+          path={route.path}
           element={
-            authUser ? (
-              <div className="flex h-screen">
-                <Logout />
-                <Left />
-                <Right />
-              </div>
-            ) : (
-              <Navigate to={"/login"} />
-            )
+            <Guard>
+              <Layout>
+                {route.routes ? (
+                  renderRoutes(route.routes)
+                ) : (
+                  <Suspense fallback={<Loading />}>
+                    <Element />
+                  </Suspense>
+                )}
+              </Layout>
+            </Guard>
           }
         />
-        <Route
-          path="/login"
-          element={authUser ? <Navigate to="/" /> : <Login />}
-        />
-        <Route
-          path="/signup"
-          element={authUser ? <Navigate to="/" /> : <Signup />}
-        />
-      </Routes>
+      );
+    })}
+  </Routes>
+);
+
+function App() {
+  return (
+    <>
+      <Suspense fallback={<Loading />}>{renderRoutes(routes)}</Suspense>
       <Toaster />
     </>
   );

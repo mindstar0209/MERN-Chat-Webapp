@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Login() {
+  console.log("hello");
   const [authUser, setAuthUser] = useAuth();
 
   const {
@@ -49,7 +50,6 @@ function Login() {
             Login with your{" "}
             <span className="text-blue-600 font-semibold">Account</span>
           </h2>
-        
 
           {/* Email */}
           <label className="input input-bordered flex items-center gap-2">
@@ -112,7 +112,7 @@ function Login() {
           <p>
             Don't have any Account?{" "}
             <Link
-              to={"/signup"}
+              to={"/auth/signup"}
               className="text-blue-500 underline cursor-pointer ml-1"
             >
               {" "}

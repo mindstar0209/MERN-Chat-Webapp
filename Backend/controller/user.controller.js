@@ -1,8 +1,9 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createTokenAndSaveCookie from "../jwt/generateToken.js";
+
 export const signup = async (req, res) => {
-  const { fullname, email, password, confirmPassword } = req.body;
+  const { fullname, email, password, confirmPassword, profileImage } = req.body;
   try {
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
@@ -17,6 +18,7 @@ export const signup = async (req, res) => {
       fullname,
       email,
       password: hashPassword,
+      profileImage,
     });
     await newUser.save();
     if (newUser) {
@@ -27,6 +29,7 @@ export const signup = async (req, res) => {
           _id: newUser._id,
           fullname: newUser.fullname,
           email: newUser.email,
+          profileImage: newUser.profileImage,
         },
       });
     }
@@ -35,6 +38,7 @@ export const signup = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -57,6 +61,7 @@ export const login = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt");

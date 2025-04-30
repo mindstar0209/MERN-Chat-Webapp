@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema({
     confirmPassword: {
         type: String,
     },
+    profileImage: {
+        type:String,
+        default: "",
+    }
 }, { timestamps: true }); // createdAt & updatedAt
 
 const User = mongoose.model("User", userSchema);

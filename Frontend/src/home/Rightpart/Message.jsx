@@ -5,7 +5,7 @@ function Message({ message }) {
   const itsMe = message.senderId === authUser.user._id;
 
   const chatName = itsMe ? " chat-end" : "chat-start";
-  const chatColor = itsMe ? "bg-cyan-900" : "";
+  const chatColor = itsMe ? "bg-accent-content" : "bg-info-content";
 
   const createdAt = new Date(message.createdAt);
   const formattedTime = createdAt.toLocaleTimeString([], {
