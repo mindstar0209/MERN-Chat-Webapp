@@ -3,7 +3,7 @@ import React from "react";
 function Loading() {
   return (
     <div
-      className="flex h-screen items-center justify-center bg-slate-600"
+      className="flex items-center justify-center bg-slate-600"
       style={{ maxHeight: "calc(88vh - 8vh)" }}
     >
       <div className="flex w-52 flex-col gap-4">

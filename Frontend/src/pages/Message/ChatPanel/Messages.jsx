@@ -18,10 +18,7 @@ function Messages() {
     }, 100);
   }, [messages]);
   return (
-    <div
-      className="overflow-y-auto py-4 px-[10%] flex flex-col gap-4"
-      style={{ minHeight: "80vh" }}
-    >
+    <div className="overflow-y-auto py-4 px-[10%] flex flex-col gap-4 min-h-[77vh]">
       {loading ? (
         <Loading />
       ) : (

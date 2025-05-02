@@ -4,7 +4,7 @@ import ChatPanel from "./ChatPanel/ChatPanel";
 
 export default function Message() {
   return (
-    <div className="flex border h-[85%]">
+    <div className="flex border h-[84vh]">
       <UserList />
       <ChatPanel />
     </div>

@@ -6,10 +6,7 @@ function UserList() {
   return (
     <div className="min-w-[30%] text-gray-300">
       <SearchBar />
-      <div
-        className=" flex-1  overflow-y-auto"
-        style={{ minHeight: "calc(84vh - 10vh)" }}
-      >
+      <div className=" flex-1  overflow-y-auto min-h-[78vh]">
         <Users />
       </div>
     </div>

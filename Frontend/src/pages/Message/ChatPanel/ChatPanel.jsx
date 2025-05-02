@@ -21,7 +21,7 @@ function ChatPanel() {
             {/* <Chatuser /> */}
             <div
               className=" flex-1 overflow-y-auto"
-              style={{ maxHeight: "80vh" }}
+              style={{ maxHeight: "77vh" }}
             >
               <Messages />
             </div>
@@ -47,7 +47,7 @@ const NoChatSelected = () => {
         >
           <CiMenuFries className="text-white text-xl" />
         </label>
-        <div className="flex h-screen items-center justify-center">
+        <div className="flex items-center justify-center">
           <h1 className="text-center">
             Welcome{" "}
             <span className="font-semibold text-xl">

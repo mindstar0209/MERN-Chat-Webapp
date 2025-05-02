@@ -7,10 +7,7 @@ function Users() {
 
   return (
     <div>
-      <div
-        className="border flex-1 overflow-y-auto"
-        style={{ maxHeight: "calc(84vh - 10vh)" }}
-      >
+      <div className="border flex-1 overflow-y-auto max-h-[78vh]">
         {allUsers.map((user, index) => (
           <User key={index} user={user} />
         ))}
