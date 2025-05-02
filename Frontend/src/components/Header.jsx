@@ -6,7 +6,7 @@ export default function Header() {
     <>
       <div className="flex items-center w-full h-[100px] border">
         <div className="w-[80px]">
-          <img src={icon} />
+          <img src={icon} alt="icon" />
         </div>
       </div>
     </>

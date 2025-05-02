@@ -13,22 +13,23 @@ export const routes = [
     routes: [
       {
         path: "login",
-        element: lazy(() => import("./pages/auth/Login")),
+        element: lazy(() => import("./pages/Auth/Login")),
       },
       {
         path: "signup",
-        element: lazy(() => import("./pages/auth/Signup")),
+        element: lazy(() => import("./pages/Auth/Signup")),
       },
     ],
   },
   {
     path: "/*",
     guard: AuthGuard,
+    layout: MainLayout,
     element: Fragment,
     routes: [
       {
         path: "",
-        guard: MainLayout,
+        element: lazy(() => import("./pages/Home")),
       },
       {
         path: "message",

@@ -1,0 +1,12 @@
+import React from "react";
+import UserList from "./Sidebar/UserList";
+import ChatPanel from "./ChatPanel/ChatPanel";
+
+export default function Message() {
+  return (
+    <div className="flex border h-[85%]">
+      <UserList />
+      <ChatPanel />
+    </div>
+  );
+}

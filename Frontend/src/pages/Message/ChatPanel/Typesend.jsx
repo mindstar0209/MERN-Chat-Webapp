@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { IoSend } from "react-icons/io5";
-import useSendMessage from "../../context/useSendMessage.js";
+import useSendMessage from "../../../context/useSendMessage.js";
 
 function Typesend() {
   const [message, setMessage] = useState("");
   const { loading, sendMessages } = useSendMessage();
 
   const handleSubmit = (e) => {
-    console.log(e);
     e.preventDefault();
     sendMessages(message);
     setMessage("");
@@ -15,19 +14,15 @@ function Typesend() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex space-x-1 h-[8vh]  bg-gray-800">
-        <div className=" w-[70%] mx-4">
+      <div className="flex space-x-1 bg-stone-200 p-2">
+        <label className="input border h-10 outline-none w-full">
           <input
             type="text"
-            placeholder="Type here"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="border-[1px] border-gray-700  flex items-center w-full py-3 px-3 rounded-xl grow outline-none bg-slate-900 mt-1"
+            className="border text-neutral"
           />
-        </div>
-        <button>
-          <IoSend className="text-3xl" />
-        </button>
+        </label>
       </div>
     </form>
   );

@@ -30,10 +30,7 @@ export default function Home() {
 
   return (
     <>
-      <div
-        className="border flex flex-col gap-4 p-4"
-        style={{ height: "100vh" }}
-      >
+      <div className="border flex flex-col gap-4 p-4">
         <div className="flex justify-end gap-2">
           Search: <div className="border w-60"></div>
         </div>

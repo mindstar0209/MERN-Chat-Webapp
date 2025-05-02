@@ -5,3 +5,13 @@
 .flex-1::-webkit-scrollbar {
   display: none;
 }
+
+*:focus,
+*:focus-within {
+  outline: none !important;
+  --input-color: none !important;
+}
+
+* {
+  border-color: #ccc;
+}

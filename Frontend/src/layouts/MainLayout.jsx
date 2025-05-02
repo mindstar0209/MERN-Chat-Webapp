@@ -1,5 +1,4 @@
 import React from "react";
-import Home from "../pages/Home";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 
@@ -16,7 +15,7 @@ const MainLayout = ({ children }) => {
             <Header />
             <Navbar />
           </div>
-          <Home />
+          {children}
         </div>
       </div>
     </>

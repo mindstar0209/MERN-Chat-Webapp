@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
-import Chatuser from "./Chatuser";
-import Messages from "./Messages";
-import Typesend from "./Typesend";
-import useConversation from "../../statemanage/useConversation.js";
-import { useAuth } from "../../context/AuthProvider.jsx";
+import Chatuser from "./Chatuser.jsx";
+import Messages from "./Messages.jsx";
+import Typesend from "./Typesend.jsx";
+import useConversation from "../../../context/useConversation.js";
+import { useAuth } from "../../../context/AuthProvider.jsx";
 import { CiMenuFries } from "react-icons/ci";
 
-function Right() {
+function ChatPanel() {
   const { selectedConversation, setSelectedConversation } = useConversation();
   useEffect(() => {
     return setSelectedConversation(null);
   }, [setSelectedConversation]);
   return (
-    <div className="w-full bg-slate-900 text-gray-300">
+    <div className="border-l text-gray-300" style={{ width: "70%" }}>
       <div>
         {!selectedConversation ? (
           <NoChatSelected />
         ) : (
           <>
-            <Chatuser />
+            {/* <Chatuser /> */}
             <div
               className=" flex-1 overflow-y-auto"
               style={{ maxHeight: "80vh" }}
@@ -33,7 +33,7 @@ function Right() {
   );
 }
 
-export default Right;
+export default ChatPanel;
 
 const NoChatSelected = () => {
   const [authUser] = useAuth();
