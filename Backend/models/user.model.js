@@ -4,12 +4,39 @@ const userSchema = mongoose.Schema(
   {
     fullname: {
       type: String,
+    },
+    username: {
+      type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
+    },
+    occupation: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    nation: {
+      type: String,
+    },
+    gender: {
+      type: String,
+    },
+    birthday: {
+      type: String,
+    },
+    summary: {
+      type: String,
+      default: "",
+    },
+    hobbies: {
+      type: String,
+      default: "",
     },
     password: {
       type: String,
@@ -18,22 +45,6 @@ const userSchema = mongoose.Schema(
     profileImage: {
       type: String,
       default: "",
-    },
-    gender: {
-      type: String,
-      required: true,
-    },
-    summary: {
-      type: String,
-      default: "",
-    },
-    country: {
-      type: String,
-      required: true,
-    },
-    birthday: {
-      type: String,
-      required: true,
     },
   },
   { timestamps: true }

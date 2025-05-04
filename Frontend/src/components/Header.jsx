@@ -1,12 +1,16 @@
 import React from "react";
-import icon from "../assets/icon.png";
+import FavIcon from "../assets/favicon.svg";
 
 export default function Header() {
   return (
     <>
-      <div className="flex items-center w-full h-[100px] border">
-        <div className="w-[80px]">
-          <img src={icon} alt="icon" />
+      <div className="flex bg-[#19b5fed9] p-6 items-center w-full h-[12vh] gap-4">
+        <div className="w-[60px]">
+          <img src={FavIcon} alt="icon" />
+        </div>
+        <div>
+          <div className="text-3xl font-extrabold text-white">WorldPals</div>
+          <div className="text-white">Meet the world friends</div>
         </div>
       </div>
     </>

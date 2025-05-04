@@ -29,7 +29,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="border flex justify-center">
+      <div className="border flex justify-center h-[30px]">
         <Link to="/" className="border px-8">
           Home
         </Link>
@@ -41,6 +41,9 @@ export default function Navbar() {
         </Link>
         <Link to="/" className="border px-8">
           Setting
+        </Link>
+        <Link to="/profile" className="border px-8">
+          Profile
         </Link>
         <button
           className="border px-8"
