@@ -189,12 +189,12 @@ export default function Profile() {
                     {...register("fullname", {
                       required: "Full name is required",
                       minLength: {
-                        value: 3,
-                        message: "Full name must be at least 3 characters",
+                        value: 2,
+                        message: "Full name must be at least 2 characters",
                       },
                       maxLength: {
-                        value: 50,
-                        message: "Full name cannot exceed 50 characters",
+                        value: 25,
+                        message: "Full name cannot exceed 25 characters",
                       },
                       pattern: {
                         value: /^[A-Za-z\s'-]+$/,
@@ -430,7 +430,9 @@ export default function Profile() {
             {/* Country */}
             <div>
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Where are you from?</legend>
+                <legend className="fieldset-legend">
+                  Country of residence
+                </legend>
                 <select
                   className="select h-8 w-full cursor-pointer"
                   {...register("country", {

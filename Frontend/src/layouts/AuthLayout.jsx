@@ -4,7 +4,7 @@ import Header from "../components/Header";
 export default function AuthLayout({ children }) {
   return (
     <>
-      <div className="flex flex-col items-center w-full bg-[#f9fcff]">
+      <div className="flex flex-col items-center w-full bg-[#f9f9fa]">
         <div className="w-[65%] bg-white">
           <div className="flex flex-col w-full">
             <Header />

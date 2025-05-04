@@ -42,6 +42,10 @@ export const routes = [
         element: lazy(() => import("./pages/Profile")),
       },
       {
+        path: "profile/:username",
+        element: lazy(() => import("./pages/UserProfile")),
+      },
+      {
         path: "*",
         element: () => <Navigate to="/" />,
       },

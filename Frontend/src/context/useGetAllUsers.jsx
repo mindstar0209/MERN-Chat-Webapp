@@ -12,10 +12,10 @@ function useGetAllUsers() {
       setLoading(true);
       try {
         const response = await axiosInstance.get("/user/allusers", {
-          // Adding credentials option if your backend requires it
           withCredentials: true,
         });
         setAllUsers(response.data);
+        console.log("allUser:", response.data);
         setLoading(false);
       } catch (error) {
         console.log("Error in useGetAllUsers: " + error);

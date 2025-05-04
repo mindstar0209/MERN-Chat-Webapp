@@ -5,9 +5,14 @@ import createTokenAndSaveCookie from "../jwt/generateToken.js";
 export const signup = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ error: "User already registered" });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({
+        error:
+          existingUser.email === email
+            ? "User already registered"
+            : "Username already exist",
+      });
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await new User({
@@ -86,7 +91,7 @@ export const allUsers = async (req, res) => {
     const loggedInUser = req.user._id;
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUser },
-    }).select("-password");
+    }).select("fullname username birthday country summary profileImage gender");
     res.status(201).json(filteredUsers);
   } catch (error) {
     console.log("Error in allUsers Controller: " + error);
@@ -133,6 +138,20 @@ export const updateProfile = async (req, res) => {
       message: "Profile updated successfully",
       user: updatedUser,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const userProfile = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username }).select("-password -email");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json(user);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
