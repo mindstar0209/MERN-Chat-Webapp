@@ -18,14 +18,18 @@ function Messages() {
     }, 100);
   }, [messages]);
   return (
-    <div className="overflow-y-auto py-4 px-[10%] flex flex-col gap-4 min-h-[77vh]">
+    <div className="overflow-y-auto pb-4 px-[10%] flex flex-col min-h-[77vh]">
       {loading ? (
         <Loading />
       ) : (
         messages.length > 0 &&
-        messages.map((message) => (
+        messages.map((message, index) => (
           <div key={message._id} ref={lastMsgRef}>
-            <Message message={message} />
+            <Message
+              key={message._id}
+              message={message}
+              previousMessage={index > 0 ? messages[index - 1] : null}
+            />
           </div>
         ))
       )}

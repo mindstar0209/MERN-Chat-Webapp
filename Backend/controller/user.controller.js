@@ -3,20 +3,22 @@ import bcrypt from "bcryptjs";
 import createTokenAndSaveCookie from "../jwt/generateToken.js";
 
 export const signup = async (req, res) => {
-  const { fullname, email, password, profileImage, gender } = req.body;
+  const { fullname, email, password, profileImage, gender, country, birthday, summary } = req.body;
   try {
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ error: "User already registered" });
     }
-    // Hashing the password
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await new User({
       fullname,
       email,
       password: hashPassword,
       profileImage,
-      gender
+      gender,
+      country,
+      birthday,
+      summary
     });
     await newUser.save();
     if (newUser) {
@@ -28,7 +30,10 @@ export const signup = async (req, res) => {
           fullname: newUser.fullname,
           email: newUser.email,
           profileImage: newUser.profileImage,
-          gender: newUser.gender
+          gender: newUser.gender,
+          country: newUser.country,
+          birthday: newUser.birthday,
+          summary: newUser.summary
         },
       });
     }
@@ -54,7 +59,10 @@ export const login = async (req, res) => {
         fullname: user.fullname,
         email: user.email,
         profileImage: user.profileImage,
-        gender: user.gender
+        gender: user.gender,
+        country: user.country,
+        birthday: user.birthday,
+        summary: user.summary
       },
     });
   } catch (error) {

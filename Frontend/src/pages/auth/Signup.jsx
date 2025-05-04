@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Lock, Mail, UserRound } from "lucide-react";
 import useImageProcessing from "../../hooks/useImageProcessing";
+import { countries } from "countries-list";
 
 function Signup() {
   const [authUser, setAuthUser] = useAuth();
@@ -20,8 +21,19 @@ function Signup() {
   } = useForm();
 
   const password = watch("password", "");
+  const summary = watch("summary", "");
+  const MAX_SUMMARY_LENGTH = 500;
+
+  // Convert countries object to array and sort by name
+  const countryList = Object.entries(countries)
+    .map(([code, country]) => ({
+      code,
+      name: country.name,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const onSubmit = async (data) => {
+    console.log("data:", data);
     try {
       let base64Image = "";
       if (data.profileImage?.[0]) {
@@ -39,6 +51,9 @@ function Signup() {
         password: data.password,
         profileImage: base64Image,
         gender: data.gender,
+        country: data.country,
+        summary: data.summary || "",
+        birthday: data.birthday,
       };
 
       const response = await axios.post("/api/user/signup", userData);
@@ -75,19 +90,16 @@ function Signup() {
 
   return (
     <>
-      <div className="flex h-screen items-center justify-center">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="border border-black px-6 py-2 rounded-md space-y-3 w-96"
-        >
-          <h1 className="text-2xl items-center text-blue-600 font-bold">
+      <div className="flex items-center justify-center">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <h1 className="text-2xl items-center text-blue-600 font-bold">
             Messenger
           </h1>
 
           <h2 className="text-2xl items-center">
             Create a new{" "}
             <span className="text-blue-600 font-semibold">Account</span>
-          </h2>
+          </h2> */}
 
           <div className="flex flex-col gap-2">
             {/* Fullname */}
@@ -155,6 +167,9 @@ function Signup() {
               </fieldset>
             </div>
 
+            {/* Profile Image Upload */}
+            {renderFileInput()}
+
             {/* Gender Section */}
             <div>
               <fieldset className="fieldset">
@@ -195,8 +210,88 @@ function Signup() {
               </fieldset>
             </div>
 
-            {/* Profile Image Upload */}
-            {renderFileInput()}
+            {/* Country */}
+            <div>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Where are you from?</legend>
+                <select
+                  className="select h-8"
+                  {...register("country", {
+                    required: "Country is required",
+                  })}
+                >
+                  <option value="">Select your country</option>
+                  {countryList.map(({ code, name }) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+                <p className="label">* Required</p>
+                {errors.country && (
+                  <span className="text-red-500 text-xs font-semibold">
+                    {errors.country.message}
+                  </span>
+                )}
+              </fieldset>
+            </div>
+
+            {/* Summary */}
+            <div>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Summary</legend>
+                <textarea
+                  className="textarea h-24"
+                  placeholder="Tell us about yourself..."
+                  {...register("summary", {
+                    maxLength: {
+                      value: MAX_SUMMARY_LENGTH,
+                      message: "Summary cannot exceed 500 characters",
+                    },
+                  })}
+                ></textarea>
+                <div className="flex justify-between items-center">
+                  <div className="label">Optional</div>
+                  <div
+                    className={`text-xs ${
+                      summary.length > MAX_SUMMARY_LENGTH
+                        ? "text-red-500"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {summary.length}/{MAX_SUMMARY_LENGTH} characters
+                  </div>
+                </div>
+                {errors.summary && (
+                  <span className="text-red-500 text-xs font-semibold">
+                    {errors.summary.message}
+                  </span>
+                )}
+              </fieldset>
+            </div>
+
+            {/* Birthday */}
+            <div>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  What is your birthday?
+                </legend>
+                <input
+                  type="date"
+                  className="input h-8"
+                  {...register("birthday", {
+                    required: "Birthday is required",
+                    // You can add more validation here if needed
+                  })}
+                />
+                <p className="label">* Required</p>
+                {errors.birthday && (
+                  <span className="text-red-500 text-xs font-semibold">
+                    {errors.birthday.message}
+                  </span>
+                )}
+              </fieldset>
+            </div>
 
             {/* Password */}
             <div>
