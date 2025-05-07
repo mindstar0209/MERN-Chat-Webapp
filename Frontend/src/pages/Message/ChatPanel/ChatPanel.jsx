@@ -3,7 +3,10 @@ import Messages from "./Messages.jsx";
 import Typesend from "./Typesend.jsx";
 import { CiMenuFries } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedConversationUser } from "../../../features/conversation/conversationSlice.js";
+import {
+  clearMessages,
+  setSelectedConversationUser,
+} from "../../../features/conversation/conversationSlice.js";
 import { useNavigate } from "react-router-dom";
 
 function ChatPanel() {
@@ -15,7 +18,10 @@ function ChatPanel() {
   const { user } = selectedConversation || {};
 
   useEffect(() => {
-    return () => dispatch(setSelectedConversationUser(null));
+    return () => {
+      dispatch(setSelectedConversationUser(null));
+      dispatch(clearMessages());
+    };
   }, [dispatch]);
 
   return (

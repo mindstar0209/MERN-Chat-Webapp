@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import axiosInstance from "../utils/axios.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setMessage } from "../features/conversation/conversationSlice.js";
+import {
+  clearMessages,
+  setMessage,
+} from "../features/conversation/conversationSlice.js";
 
 const useGetMessage = () => {
   const dispatch = useDispatch();
@@ -24,10 +26,12 @@ const useGetMessage = () => {
           console.log("Error in getting messages", error);
           setLoading(false);
         }
+      } else {
+        dispatch(clearMessages());
       }
     };
     getMessages();
-  }, [user, setMessage]);
+  }, [user, dispatch]);
   return { loading, messages };
 };
 

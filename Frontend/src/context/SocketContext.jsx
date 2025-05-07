@@ -1,39 +1,42 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import io from "socket.io-client";
-const socketContext = createContext();
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import axiosInstance from "../utils/axios";
+
+const SocketContext = createContext();
 
 export const useSocketContext = () => {
-  return useContext(socketContext);
+  return useContext(SocketContext);
 };
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const authUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
+    const authUser = JSON.parse(localStorage.getItem("Auth"));
+
     if (authUser) {
       const socket = io("http://localhost:5002", {
         query: {
           userId: authUser.user._id,
         },
       });
+
       setSocket(socket);
+
       socket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
       });
-      return () => socket.close();
-    } else {
-      if (socket) {
+
+      return () => {
         socket.close();
-        setSocket(null);
-      }
+      };
     }
-  }, [authUser]);
+  }, []);
+
   return (
-    <socketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}
-    </socketContext.Provider>
+    </SocketContext.Provider>
   );
 };

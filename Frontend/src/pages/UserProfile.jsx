@@ -113,7 +113,7 @@ export default function UserProfile() {
           <div className="text-info font-semibold text-lg divider divider-vertical divider-start divider-info">
             Summary
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 whitespace-break-spaces">
             {user?.summary ? user.summary : "No Summary"}
           </div>
         </div>

@@ -36,7 +36,7 @@ function Message({ message, previousMessage }) {
         <div className={"flex flex-col items-start max-w-[90%] w-full"}>
           {showHeader && (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-blue-600 font-bold break-words">
+              <span className="text-sm text-info font-bold break-words">
                 {itsMe ? authUser?.user?.fullname : user?.fullname}
               </span>
             </div>

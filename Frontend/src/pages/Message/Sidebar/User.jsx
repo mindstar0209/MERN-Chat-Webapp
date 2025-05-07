@@ -1,23 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import { countries } from "countries-list";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setSelectedConversationUser,
   setEnterCount,
+  setUnreadCount,
 } from "../../../features/conversation/conversationSlice.js";
+import axiosInstance from "../../../utils/axios.js";
 
 function User({ user }) {
   const dispatch = useDispatch();
+  const unreadCount = useSelector(
+    (state) => state.conversation.unreadCounts[user._id] || 0
+  );
   const selectedConversation = useSelector(
     (state) => state.conversation.selectedConversation.user
   );
   const isSelected = selectedConversation?._id === user._id;
   const { socket, onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(user._id);
+  const authUser = JSON.parse(localStorage.getItem("Auth"));
 
-  const defaultAvatar =
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await axiosInstance.get("/message/unread");
+        dispatch(
+          setUnreadCount({
+            userId: user._id,
+            count: response.data[user._id] || 0,
+          })
+        );
+      } catch (error) {
+        console.error("Error fetching unread count:", error);
+      }
+    };
+
+    fetchUnreadCount();
+  }, [user._id]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewMessage = (newMessage) => {
+      // If the message is from this user and I'm not currently in this conversation
+      if (newMessage.senderId === user._id && !isSelected) {
+        dispatch(
+          setUnreadCount({
+            userId: user._id,
+            count: (unreadCount || 0) + 1,
+          })
+        );
+      }
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [socket, user._id, isSelected, unreadCount, dispatch]);
 
   const calculateAge = (birthday) => {
     if (!birthday) return "";
@@ -36,30 +79,37 @@ function User({ user }) {
     return countries[code]?.name || code;
   }
 
-  const handleSelectClick = (user) => {
+  const handleSelectClick = async (user) => {
     dispatch(setSelectedConversationUser(user));
     dispatch(setEnterCount(0));
+    dispatch(setUnreadCount({ userId: user._id, count: 0 }));
+
+    // Mark messages as read when selecting the conversation
+    try {
+      await axiosInstance.put(`/message/read/${user._id}`);
+    } catch (error) {
+      console.error("Error marking messages as read:", error);
+    }
   };
 
   return (
     <div
-      className={`border-b hover:bg-zinc-100 duration-300 ${
+      className={`border-b px-4 py-2  flex items-center justify-between hover:bg-zinc-100 duration-300 ${
         isSelected ? "bg-blue-100" : ""
       } cursor-pointer`}
       onClick={() => handleSelectClick(user)}
     >
-      <div className="flex px-4 py-2 gap-4 items-center">
+      <div className="flex gap-4 items-center">
         <div
           className={`avatar ${isOnline ? "avatar-online" : "avatar-offline"}`}
         >
           <div className="w-16">
             <img
-              src={user.profileImage || defaultAvatar}
+              src={user.profileImage}
               alt={user.fullname}
               className="w-full h-full rounded-full object-cover"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = defaultAvatar;
               }}
             />
           </div>
@@ -86,6 +136,12 @@ function User({ user }) {
           </div>
         </div>
       </div>
+
+      {unreadCount > 0 && (
+        <div className="w-5 h-5 min-w-5 min-h-5 flex text-sm items-center justify-center rounded-full bg-info text-white">
+          {unreadCount}
+        </div>
+      )}
     </div>
   );
 }

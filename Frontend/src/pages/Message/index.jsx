@@ -3,6 +3,7 @@ import UserList from "./Sidebar/UserList";
 import ChatPanel from "./ChatPanel/ChatPanel";
 import useGetChatUsers from "../../context/userGetChatUsers";
 import { useDispatch, useSelector } from "react-redux";
+import { clearMessages } from "../../features/conversation/conversationSlice";
 
 export default function Message() {
   const getChatUsers = useGetChatUsers();
@@ -15,6 +16,10 @@ export default function Message() {
 
   useEffect(() => {
     getChatUsers();
+
+    // return () => {
+    //   dispatch(clearMessages());
+    // };
   }, [dispatch, enterCount]);
 
   return (
