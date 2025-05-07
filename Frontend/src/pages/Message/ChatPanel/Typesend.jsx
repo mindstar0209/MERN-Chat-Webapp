@@ -1,8 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
-import useSendMessage from "../../../context/useSendMessage.js";
+import { useDispatch, useSelector } from "react-redux";
+import useSendMessage from "../../../context/useSendMessage";
+import {
+  setEnterCount,
+  setUsers,
+} from "../../../features/conversation/conversationSlice";
+import axiosInstance from "../../../utils/axios";
+import useGetChatUsers from "../../../context/userGetChatUsers";
 
 function Typesend() {
+  const dispatch = useDispatch();
+  const { enterCount } = useSelector(
+    (state) => state.conversation.selectedConversation
+  );
   const [message, setMessage] = useState("");
   const { loading, sendMessages } = useSendMessage();
   const textareaRef = useRef(null);
@@ -12,6 +23,8 @@ function Typesend() {
     if (!message.trim()) return;
     sendMessages(message);
     setMessage("");
+
+    dispatch(setEnterCount(enterCount + 1));
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "40px";
@@ -29,7 +42,7 @@ function Typesend() {
     <form onSubmit={handleSubmit}>
       <div className="flex space-x-1 h-[55px]">
         <div className="relative w-full h-full">
-          <div className="bg-stone-200 p-2 absolute bottom-0 left-0 w-full">
+          <div className="bg-stone-200 p-2 absolute bottom-0 left-0 w-full flex">
             <textarea
               ref={textareaRef}
               value={message}

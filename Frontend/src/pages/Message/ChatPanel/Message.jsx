@@ -1,9 +1,11 @@
 import React from "react";
-import useConversation from "../../../context/useConversation";
+import { useSelector } from "react-redux";
 
 function Message({ message, previousMessage }) {
-  const { selectedConversation } = useConversation();
-  const authUser = JSON.parse(localStorage.getItem("ChatApp"));
+  const { user } = useSelector(
+    (state) => state.conversation.selectedConversation
+  );
+  const authUser = JSON.parse(localStorage.getItem("Auth"));
   const itsMe = message.senderId === authUser.user._id;
 
   // Check if previous message exists and is from the same sender
@@ -16,9 +18,6 @@ function Message({ message, previousMessage }) {
     minute: "2-digit",
   });
 
-  const defaultAvatar =
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-
   return (
     <div
       className={`flex flex-col space-y-1 ${!showHeader ? "mt-2" : " mt-4"}`}
@@ -27,11 +26,7 @@ function Message({ message, previousMessage }) {
         {showHeader && (
           <div className="w-8 h-8 overflow-hidden flex-shrink-0">
             <img
-              src={
-                itsMe
-                  ? authUser.user.profileImage || defaultAvatar
-                  : selectedConversation.profileImage || defaultAvatar
-              }
+              src={itsMe ? authUser?.user?.profileImage : user?.profileImage}
               alt="avatar"
               className="w-full h-full object-cover"
             />
@@ -42,7 +37,7 @@ function Message({ message, previousMessage }) {
           {showHeader && (
             <div className="flex items-center gap-2">
               <span className="text-sm text-blue-600 font-bold break-words">
-                {itsMe ? authUser.user.fullname : selectedConversation.fullname}
+                {itsMe ? authUser?.user?.fullname : user?.fullname}
               </span>
             </div>
           )}

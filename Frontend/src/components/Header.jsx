@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <>
       <div className="flex bg-[#19b5fed9] p-6 items-center w-full h-[12vh] gap-4">
-        <div className="w-[60px]">
+        <div className="w-[70px]">
           <img src={FavIcon} alt="icon" />
         </div>
         <div>

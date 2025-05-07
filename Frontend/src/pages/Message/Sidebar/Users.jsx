@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import User from "./User";
-import useGetAllUsers from "../../../context/useGetAllUsers";
+import { useSelector } from "react-redux";
 
 function Users() {
-  const [allUsers, loading] = useGetAllUsers();
+  const { users } = useSelector((state) => state.conversation);
 
   return (
     <div>
-      <div className="border flex-1 overflow-y-auto max-h-[78vh]">
-        {allUsers.map((user, index) => (
-          <User key={index} user={user} />
-        ))}
+      <div className="flex-1 border-t overflow-y-auto max-h-[78vh]">
+        {users && users.map((user, index) => <User key={index} user={user} />)}
       </div>
     </div>
   );

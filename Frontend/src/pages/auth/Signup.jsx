@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuth } from "../../context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Hand, Lock, Mail, UserRound } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../features/auth/authSlice";
 
 function Signup() {
-  const [authUser, setAuthUser] = useAuth();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -30,8 +31,8 @@ function Signup() {
 
       if (response.data) {
         toast.success("Signup successful");
-        localStorage.setItem("ChatApp", JSON.stringify(response.data));
-        setAuthUser(response.data);
+        localStorage.setItem("Auth", JSON.stringify(response.data));
+        dispatch(setUser(response.data));
       }
     } catch (error) {
       if (error.response) {

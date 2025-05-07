@@ -1,21 +1,17 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useAuth } from "../context/AuthProvider";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
 import useImageProcessing from "../hooks/useImageProcessing";
 import { useForm } from "react-hook-form";
 import { countries } from "countries-list";
 import ISO6391 from "iso-639-1";
-import {
-  UserRound,
-  Mail,
-  Lock,
-  ContactRound,
-  BriefcaseBusiness,
-} from "lucide-react";
 import axiosInstance from "../utils/axios";
 import toast from "react-hot-toast";
+import { CircleCheck, TriangleAlert } from "lucide-react";
 
 export default function Profile() {
-  const [authUser, setAuthUser] = useAuth();
+  const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth.user);
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const { processImage, isProcessing } = useImageProcessing();
@@ -127,8 +123,8 @@ export default function Profile() {
 
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        localStorage.setItem("ChatApp", JSON.stringify(response.data));
-        setAuthUser(response.data);
+        localStorage.setItem("Auth", JSON.stringify(response.data));
+        dispatch(setUser(response.data));
       }
     } catch (error) {
       if (error.response) {
@@ -154,8 +150,22 @@ export default function Profile() {
   };
 
   return (
-    <>
-      <div className="flex justify-center p-10 gap-20">
+    <div className="flex flex-col gap-6 px-10 py-6">
+      {authUser?.user?.isActivated === true ? (
+        <div role="alert" className="alert alert-success alert-soft">
+          <CircleCheck className="w-5 h-5" />
+          <span>Your account is activated now!</span>
+        </div>
+      ) : (
+        <div role="alert" className="alert alert-warning alert-soft">
+          <TriangleAlert className="w-5 h-5" />
+          <span>
+            Your account is currently inactive. Please complete your profile to
+            activate it.
+          </span>
+        </div>
+      )}
+      <div className="flex justify-center gap-20">
         {/* Display user info */}
         {authUser && (
           <div className="flex flex-col">
@@ -527,6 +537,6 @@ export default function Profile() {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 }

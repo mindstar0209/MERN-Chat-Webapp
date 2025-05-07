@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import Message from "./Message";
-import useGetMessage from "../../../context/useGetMessage.js";
+import useGetMessage from "../../../context/useGetMessage";
 import Loading from "../../../components/Loading.jsx";
-import useGetSocketMessage from "../../../context/useGetSocketMessage.js";
+import useGetSocketMessage from "../../../context/useGetSocketMessage";
+import { useSelector } from "react-redux";
 function Messages() {
   const { loading, messages } = useGetMessage();
+
   useGetSocketMessage();
 
   const lastMsgRef = useRef();
@@ -17,8 +19,9 @@ function Messages() {
       }
     }, 100);
   }, [messages]);
+
   return (
-    <div className="overflow-y-auto pb-4 px-[10%] flex flex-col min-h-[77vh]">
+    <div className="overflow-y-auto pb-4 px-[10%] flex flex-col min-h-[calc(77vh-52px)]">
       {loading ? (
         <Loading />
       ) : (

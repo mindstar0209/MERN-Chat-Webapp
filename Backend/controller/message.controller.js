@@ -18,7 +18,7 @@ export const sendMessage = async (req, res) => {
       senderId,
       receiverId,
       message,
-      read : false
+      read: false,
     });
     if (newMessage) {
       conversation.messages.push(newMessage._id);

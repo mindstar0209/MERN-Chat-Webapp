@@ -1,8 +1,10 @@
 import React from "react";
 import useGetAllUsers from "../context/useGetAllUsers";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Home() {
+  const authUser = useSelector((state) => state.auth.user);
   const [allUsers, loading] = useGetAllUsers();
   const navigate = useNavigate();
   const defaultAvatar =
@@ -20,11 +22,15 @@ export default function Home() {
     return age;
   };
 
+  const handleUserCard = (username) => {
+    navigate(`/profile/${username}`);
+  };
+
   const UserCard = ({ user }) => {
     return (
       <div
         className="card shadow-sm border flex flex-row gap-4 cursor-pointer"
-        onClick={() => navigate(`/profile/${user.username}`)}
+        onClick={() => handleUserCard(user.username)}
       >
         <div className="flex flex-row gap-2">
           <div className="min-w-32 min-h-32 h-32 w-32">

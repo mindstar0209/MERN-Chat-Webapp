@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
 import useGetAllUsers from "../../../context/useGetAllUsers";
-import useConversation from "../../../context/useConversation";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedConversationUser } from "../../../features/conversation/conversationSlice";
 function SearchBar() {
+  const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [allUsers] = useGetAllUsers();
-  const { setSelectedConversation } = useConversation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +16,7 @@ function SearchBar() {
       user.fullname?.toLowerCase().includes(search.toLowerCase())
     );
     if (conversation) {
-      setSelectedConversation(conversation);
+      dispatch(setSelectedConversationUser(conversation));
       setSearch("");
     } else {
       toast.error("User not found");
@@ -25,7 +26,7 @@ function SearchBar() {
     <div className="px-2 py-2">
       <form onSubmit={handleSubmit}>
         <div className="flex space-x-3">
-          <label className="input h-8">
+          <label className="input">
             <Search className="h-4 opacity-50" />
             <input
               type="search"

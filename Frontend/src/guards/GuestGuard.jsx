@@ -1,10 +1,13 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import { useSelector } from "react-redux";
 
 const GuestGuard = ({ children }) => {
-  const [authUser] = useAuth();
+  const authUser = useSelector((state) => state.auth.user);
 
   if (authUser) {
+    if (authUser.user?.isActivated === false) {
+      return <Navigate to="/profile" />;
+    }
     return <Navigate to="/" />;
   }
 

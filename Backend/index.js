@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 
 import userRoute from "./routes/user.route.js";
 import messageRoute from "./routes/message.route.js";
+import conversationRoute from "./routes/conversation.route.js";
 import { app, server } from "./SocketIO/server.js";
 
 dotenv.config();
@@ -19,16 +20,17 @@ const PORT = process.env.PORT || 3001;
 const URI = process.env.MONGODB_URI;
 
 try {
-    mongoose.connect(URI);
-    console.log("Connected to MongoDB");
+  mongoose.connect(URI);
+  console.log("Connected to MongoDB");
 } catch (error) {
-    console.log(error);
+  console.log(error);
 }
 
 //routes
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
+app.use("/api/conversations", conversationRoute);
 
 server.listen(PORT, () => {
-    console.log(`Server is Running on port ${PORT}`);
+  console.log(`Server is Running on port ${PORT}`);
 });

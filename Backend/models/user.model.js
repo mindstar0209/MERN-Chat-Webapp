@@ -45,6 +45,10 @@ const userSchema = mongoose.Schema(
     profileImage: {
       type: String,
     },
+    isActivated: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 ); // createdAt & updatedAt

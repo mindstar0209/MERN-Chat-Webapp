@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { countries } from "countries-list";
 import ISO6391 from "iso-639-1";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setSelectedConversationUser,
+  setStartConversationUser,
+  setUsers,
+} from "../features/conversation/conversationSlice";
 
 export default function UserProfile() {
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const defaultAvatar =
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (username) {
       axiosInstance
         .get(`/user/profile/${username}`)
         .then((res) => {
-          console.log("res:", res.data);
           setUser(res.data);
         })
         .catch((err) => {
@@ -52,12 +56,19 @@ export default function UserProfile() {
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found.</div>;
 
+  const handleMessageClick = async () => {
+    // const filteredUsers = chatUsers.filter((u) => u._id !== user._id);
+    // dispatch(setUsers([user, ...filteredUsers]));
+    dispatch(setSelectedConversationUser(user));
+    navigate("/message");
+  };
+
   return (
     <div className="flex flex-col px-40 py-10 items-center gap-6">
       <div className="flex justify-center gap-12 w-full">
         <div className="flex flex-col">
           <img
-            src={user.profileImage || defaultAvatar}
+            src={user.profileImage}
             alt="Profile"
             className="w-40 h-40 min-w-40 min-h-40 object-cover rounded-md"
             title="Click to change image"
@@ -74,12 +85,24 @@ export default function UserProfile() {
             <div className="text-base">
               {user?.gender?.charAt(0).toUpperCase() + user?.gender?.slice(1)}
               {user?.birthday && <>, {calculateAge(user.birthday)}</>}
-              {user?.country && <>, {getCountryName(user.country)}</>}
+              {user?.country && (
+                <>
+                  , {getCountryName(user.country)}{" "}
+                  <img
+                    src={`https://flagcdn.com/w20/${user.country.toLowerCase()}.png`}
+                    alt={user.country}
+                    className="border inline-block"
+                  />
+                </>
+              )}
             </div>
             <div className="text-base text-gray-500 italic">
               {user?.occupation}
             </div>
-            <button className="btn btn-info px-6 text-white w-max">
+            <button
+              className="btn btn-info px-6 text-white w-max"
+              onClick={handleMessageClick}
+            >
               Message
             </button>
           </div>

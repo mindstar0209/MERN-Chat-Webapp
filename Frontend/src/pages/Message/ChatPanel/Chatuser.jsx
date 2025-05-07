@@ -1,10 +1,12 @@
 import React from "react";
-import useConversation from "../../../context/useConversation.js";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import { CiMenuFries } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 function Chatuser() {
-  const { selectedConversation } = useConversation();
+  const { user } = useSelector(
+    (state) => state.conversation.selectedConversation
+  );
   const { onlineUsers } = useSocketContext();
   const getOnlineUsersStatus = (userId) => {
     console.log("data:", onlineUsers);
@@ -21,10 +23,8 @@ function Chatuser() {
         </div>
       </div>
       <div>
-        <h1 className="text-xl">{selectedConversation.fullname}</h1>
-        <span className="text-sm">
-          {getOnlineUsersStatus(selectedConversation._id)}
-        </span>
+        <h1 className="text-xl">{user.fullname}</h1>
+        <span className="text-sm">{getOnlineUsersStatus(user._id)}</span>
       </div>
     </div>
   );

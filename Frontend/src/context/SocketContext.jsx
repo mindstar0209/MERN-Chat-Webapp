@@ -1,9 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthProvider";
+import { useSelector } from "react-redux";
 import io from "socket.io-client";
 const socketContext = createContext();
 
-// it is a hook.
 export const useSocketContext = () => {
   return useContext(socketContext);
 };
@@ -11,7 +10,7 @@ export const useSocketContext = () => {
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [authUser] = useAuth();
+  const authUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (authUser) {

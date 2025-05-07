@@ -1,22 +1,24 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 
 export default function Navbar() {
+  const authUser = useSelector((state) => state.auth.user);
   const [loading, setLoading] = useState(false);
-  const [, setAuthUser] = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     setLoading(true);
     try {
       await axios.post("/api/user/logout");
-      localStorage.removeItem("ChatApp");
+      localStorage.removeItem("Auth");
       Cookies.remove("jwt");
-      setAuthUser(undefined);
+      dispatch(logout());
       toast.success("Logged out successfully");
       navigate("/auth/login", { replace: true });
     } catch (error) {
@@ -30,21 +32,45 @@ export default function Navbar() {
   return (
     <>
       <div className="border flex justify-center h-[30px]">
-        <Link to="/" className="border px-8">
+        <button
+          onClick={() => navigate("/")}
+          className={`border px-8 ${
+            authUser.user.isActivated === false ? "text-gray-400" : ""
+          }`}
+          disabled={authUser.user.isActivated === false ? "disabled" : ""}
+        >
           Home
-        </Link>
-        <Link to="/" className="border px-8">
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className={`border px-8 ${
+            authUser.user.isActivated === false ? "text-gray-400" : ""
+          }`}
+          disabled={authUser.user.isActivated === false ? "disabled" : ""}
+        >
           Network
-        </Link>
-        <Link to="/message" className="border px-8">
+        </button>
+        <button
+          onClick={() => navigate("/message")}
+          className={`border px-8 ${
+            authUser.user.isActivated === false ? "text-gray-400" : ""
+          }`}
+          disabled={authUser.user.isActivated === false ? "disabled" : ""}
+        >
           Message
-        </Link>
-        <Link to="/" className="border px-8">
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className={`border px-8 ${
+            authUser.user.isActivated === false ? "text-gray-400" : ""
+          }`}
+          disabled={authUser.user.isActivated === false ? "disabled" : ""}
+        >
           Setting
-        </Link>
-        <Link to="/profile" className="border px-8">
+        </button>
+        <button onClick={() => navigate("/profile")} className="border px-8">
           Profile
-        </Link>
+        </button>
         <button
           className="border px-8"
           onClick={handleLogout}

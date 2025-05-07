@@ -35,6 +35,10 @@ export const signup = async (req, res) => {
           country: newUser.country,
           birthday: newUser.birthday,
           summary: newUser.summary,
+          hobbies: newUser.hobbies,
+          occupation: newUser.occupation,
+          nation: newUser.nation,
+          isActivated: false,
         },
       });
     }
@@ -68,6 +72,7 @@ export const login = async (req, res) => {
         birthday: user.birthday,
         summary: user.summary,
         hobbies: user.hobbies,
+        isActivated: user.isActivated,
       },
     });
   } catch (error) {
@@ -91,7 +96,10 @@ export const allUsers = async (req, res) => {
     const loggedInUser = req.user._id;
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUser },
-    }).select("fullname username birthday country summary profileImage gender");
+      isActivated: true,
+    }).select(
+      "fullname username birthday country summary profileImage gender isActivated"
+    );
     res.status(201).json(filteredUsers);
   } catch (error) {
     console.log("Error in allUsers Controller: " + error);
@@ -100,6 +108,7 @@ export const allUsers = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
+    console.log("req:", req.body);
     const userId = req.user._id;
     const allowedFields = [
       "fullname",
@@ -122,6 +131,21 @@ export const updateProfile = async (req, res) => {
 
     if (Object.keys(updateObj).length === 0) {
       return res.status(400).json({ error: "No valid fields to update" });
+    }
+
+    // Check if all required fields are present in the update
+    const requiredFields = [
+      "fullname",
+      "gender",
+      "nation",
+      "country",
+      "birthday",
+    ];
+    const hasAllRequiredFields = requiredFields.every(
+      (field) => req.body[field] !== undefined
+    );
+    if (hasAllRequiredFields) {
+      updateObj.isActivated = true;
     }
 
     const updatedUser = await User.findByIdAndUpdate(
