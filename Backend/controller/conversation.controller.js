@@ -14,7 +14,15 @@ export const chatUsers = async (req, res) => {
 
     // Get the other user from each conversation
     const users = conversations
-      .map((conv) => conv.members.find((m) => m._id.toString() !== userId))
+      .map((conv) => {
+        const otherUser = conv.members.find((m) => m._id.toString() !== userId);
+        if (otherUser) {
+          const { password, email, ...userWithoutSensitiveData } =
+            otherUser.toObject();
+          return userWithoutSensitiveData;
+        }
+        return null;
+      })
       .filter(Boolean);
 
     res.status(200).json(users);
