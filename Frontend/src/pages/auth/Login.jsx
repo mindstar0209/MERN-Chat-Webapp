@@ -27,9 +27,11 @@ function Login() {
       .then((response) => {
         if (response.data) {
           toast.success("Login successful");
+          localStorage.setItem("Auth", JSON.stringify(response.data));
+          dispatch(setUser(response.data));
+          // Force socket reconnection after login
+          window.location.reload();
         }
-        localStorage.setItem("Auth", JSON.stringify(response.data));
-        dispatch(setUser(response.data));
       })
       .catch((error) => {
         if (error.response) {

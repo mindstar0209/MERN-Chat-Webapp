@@ -13,25 +13,38 @@ export const SocketProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
-    const authUser = JSON.parse(localStorage.getItem("Auth"));
+    const initializeSocket = () => {
+      const authUser = JSON.parse(localStorage.getItem("Auth"));
 
-    if (authUser) {
-      const socket = io("http://localhost:5002", {
-        query: {
-          userId: authUser.user._id,
-        },
-      });
+      if (authUser) {
+        const socket = io("http://localhost:5002", {
+          query: {
+            userId: authUser.user._id,
+          },
+          reconnection: true,
+          reconnectionAttempts: 5,
+          reconnectionDelay: 1000,
+        });
 
-      setSocket(socket);
+        socket.on("connect", () => {
+          console.log("Socket connected");
+        });
 
-      socket.on("getOnlineUsers", (users) => {
-        setOnlineUsers(users);
-      });
+        socket.on("getOnlineUsers", (users) => {
+          setOnlineUsers(users);
+        });
 
-      return () => {
+        setSocket(socket);
+      }
+    };
+
+    initializeSocket();
+
+    return () => {
+      if (socket) {
         socket.close();
-      };
-    }
+      }
+    };
   }, []);
 
   return (

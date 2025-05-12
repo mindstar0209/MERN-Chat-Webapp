@@ -19,7 +19,7 @@ const useGetSocketMessage = () => {
   const authUser = JSON.parse(localStorage.getItem("Auth"));
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !authUser?.user?._id) return;
 
     const handleNewMessage = async (newMessage) => {
       // If the message is for the current user
@@ -39,15 +39,7 @@ const useGetSocketMessage = () => {
           }
         } else {
           // Increment unread count for the sender
-          dispatch(
-            setUnreadCount({
-              userId: newMessage.senderId,
-              count:
-                (messages.filter(
-                  (m) => m.senderId === newMessage.senderId && !m.read
-                ).length || 0) + 1,
-            })
-          );
+          dispatch(incrementUnreadCount(newMessage.senderId));
         }
       }
     };
@@ -57,7 +49,7 @@ const useGetSocketMessage = () => {
     return () => {
       socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, messages, user, authUser.user._id, dispatch]);
+  }, [socket, messages, user, authUser?.user?._id, dispatch]);
 };
 
 export default useGetSocketMessage;

@@ -8,6 +8,7 @@ import {
   setSelectedConversationUser,
 } from "../../../features/conversation/conversationSlice.js";
 import { useNavigate } from "react-router-dom";
+import TypingIndicator from "../../../components/TypingIndicator.jsx";
 
 function ChatPanel() {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ function ChatPanel() {
           {/* {!user ? <NoChatSelected /> : <Messages />} */}
           <Messages />
         </div>
+        <TypingIndicator />
         <Typesend />
       </div>
     </div>

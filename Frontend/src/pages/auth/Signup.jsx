@@ -33,6 +33,8 @@ function Signup() {
         toast.success("Signup successful");
         localStorage.setItem("Auth", JSON.stringify(response.data));
         dispatch(setUser(response.data));
+        // Force socket reconnection after signup
+        window.location.reload();
       }
     } catch (error) {
       if (error.response) {

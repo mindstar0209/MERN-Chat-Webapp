@@ -21,7 +21,7 @@ function Messages() {
   }, [messages]);
 
   return (
-    <div className="overflow-y-auto pb-4 px-[10%] flex flex-col min-h-[calc(77vh-52px)]">
+    <div className="overflow-y-scroll pb-4 px-[10%] flex flex-col min-h-[calc(77vh-52px)] h-[calc(77vh-52px)]">
       {loading ? (
         <Loading />
       ) : (

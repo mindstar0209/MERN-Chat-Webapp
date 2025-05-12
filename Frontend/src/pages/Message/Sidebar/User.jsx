@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSocketContext } from "../../../context/SocketContext.jsx";
 import { countries } from "countries-list";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,24 +22,14 @@ function User({ user }) {
   const isOnline = onlineUsers.includes(user._id);
   const authUser = JSON.parse(localStorage.getItem("Auth"));
 
+  // Set initial unread count from user data
   useEffect(() => {
-    const fetchUnreadCount = async () => {
-      try {
-        const response = await axiosInstance.get("/message/unread");
-        dispatch(
-          setUnreadCount({
-            userId: user._id,
-            count: response.data[user._id] || 0,
-          })
-        );
-      } catch (error) {
-        console.error("Error fetching unread count:", error);
-      }
-    };
+    if (user.unreadCount) {
+      dispatch(setUnreadCount({ userId: user._id, count: user.unreadCount }));
+    }
+  }, [user._id, user.unreadCount, dispatch]);
 
-    fetchUnreadCount();
-  }, [user._id]);
-
+  // Listen for new messages
   useEffect(() => {
     if (!socket) return;
 
@@ -82,13 +72,15 @@ function User({ user }) {
   const handleSelectClick = async (user) => {
     dispatch(setSelectedConversationUser(user));
     dispatch(setEnterCount(0));
-    dispatch(setUnreadCount({ userId: user._id, count: 0 }));
 
-    // Mark messages as read when selecting the conversation
-    try {
-      await axiosInstance.put(`/message/read/${user._id}`);
-    } catch (error) {
-      console.error("Error marking messages as read:", error);
+    // Only clear unread count if there are unread messages
+    if (unreadCount > 0) {
+      dispatch(setUnreadCount({ userId: user._id, count: 0 }));
+      try {
+        await axiosInstance.put(`/message/read/${user._id}`);
+      } catch (error) {
+        console.error("Error marking messages as read:", error);
+      }
     }
   };
 
