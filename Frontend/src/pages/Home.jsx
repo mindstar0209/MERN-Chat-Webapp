@@ -2,6 +2,7 @@ import React from "react";
 import useGetAllUsers from "../context/useGetAllUsers";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Loading from "../components/Loading";
 
 export default function Home() {
   const authUser = useSelector((state) => state.auth.user);
@@ -78,13 +79,16 @@ export default function Home() {
         <div className="flex justify-end gap-2">
           Search: <div className="border w-60"></div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            allUsers?.map((user) => <UserCard key={user._id} user={user} />)
-          )}
-        </div>
+
+        {loading ? (
+          <Loading />
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            {allUsers?.map((user) => (
+              <UserCard key={user._id} user={user} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

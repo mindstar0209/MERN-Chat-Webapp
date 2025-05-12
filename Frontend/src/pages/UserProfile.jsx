@@ -9,6 +9,7 @@ import {
   setStartConversationUser,
   setUsers,
 } from "../features/conversation/conversationSlice";
+import Loading from "../components/Loading";
 
 export default function UserProfile() {
   const { username } = useParams();
@@ -53,7 +54,7 @@ export default function UserProfile() {
     return ISO6391.getName(code) || code;
   }
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
   if (!user) return <div>User not found.</div>;
 
   const handleMessageClick = async () => {

@@ -2,8 +2,8 @@ import React from "react";
 
 function Loading() {
   return (
-    <div>
-      <span className="loading loading-ring loading-xl"></span>
+    <div className="w-full flex justify-center mt-12">
+      <span className="loading loading-ring text-info loading-xl"></span>
     </div>
   );
 }
