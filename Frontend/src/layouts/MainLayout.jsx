@@ -7,7 +7,7 @@ const MainLayout = ({ children }) => {
     <>
       <div className="flex flex-col items-center w-full bg-[#f9f9fa]">
         <div className="w-[65%] bg-white">
-          <div className="flex flex-col w-full">
+          <div className="sticky top-0 flex flex-col w-full z-20">
             <Header />
             <Navbar />
           </div>

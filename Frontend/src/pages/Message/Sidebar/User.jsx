@@ -29,29 +29,6 @@ function User({ user }) {
     }
   }, [user._id, user.unreadCount, dispatch]);
 
-  // Listen for new messages
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNewMessage = (newMessage) => {
-      // If the message is from this user and I'm not currently in this conversation
-      if (newMessage.senderId === user._id && !isSelected) {
-        dispatch(
-          setUnreadCount({
-            userId: user._id,
-            count: (unreadCount || 0) + 1,
-          })
-        );
-      }
-    };
-
-    socket.on("newMessage", handleNewMessage);
-
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
-  }, [socket, user._id, isSelected, unreadCount, dispatch]);
-
   const calculateAge = (birthday) => {
     if (!birthday) return "";
     const birthDate = new Date(birthday);

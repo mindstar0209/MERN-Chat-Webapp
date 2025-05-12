@@ -31,7 +31,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="border flex justify-center h-[30px]">
+      <div className="border flex justify-center h-[30px] bg-white">
         <button
           onClick={() => navigate("/")}
           className={`border px-8 ${

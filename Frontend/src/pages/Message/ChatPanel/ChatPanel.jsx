@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Messages from "./Messages.jsx";
 import Typesend from "./Typesend.jsx";
 import { CiMenuFries } from "react-icons/ci";
@@ -9,6 +9,7 @@ import {
 } from "../../../features/conversation/conversationSlice.js";
 import { useNavigate } from "react-router-dom";
 import TypingIndicator from "../../../components/TypingIndicator.jsx";
+import { EllipsisVertical, Lock, TriangleAlert } from "lucide-react";
 
 function ChatPanel() {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ function ChatPanel() {
   );
   const { user } = selectedConversation || {};
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     return () => {
       dispatch(setSelectedConversationUser(null));
@@ -25,23 +28,64 @@ function ChatPanel() {
     };
   }, [dispatch]);
 
+  const toggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleOutsideClick = (e) => {
+    if (!e.target.closest(".menu-dropdown")) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div className="border-l text-gray-300" style={{ width: "70%" }}>
       <div>
         {user ? (
-          <div className="w-full flex items-center gap-2 p-2 border-b">
-            <div className="w-[40px] h-[40px] overflow-hidden flex-shrink-0">
-              <img
-                src={user?.profileImage}
-                alt="avatar"
-                className="w-full h-full rounded-full object-cover"
-              />
+          <div className="flex items-center p-2 border-b">
+            <div className="w-full flex items-center gap-2">
+              <div className="w-[40px] h-[40px] overflow-hidden flex-shrink-0">
+                <img
+                  src={user?.profileImage}
+                  alt="avatar"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              </div>
+              <div
+                className="text-black text-base hover:underline cursor-pointer"
+                onClick={() => navigate(`/profile/${user?.username}`)}
+              >
+                {user?.fullname}
+                <TypingIndicator />
+              </div>
             </div>
-            <div
-              className="text-black text-base hover:underline cursor-pointer"
-              onClick={() => navigate(`/profile/${user?.username}`)}
-            >
-              {user?.fullname}
+            <div className="relative menu-dropdown">
+              <button className="btn btn-square btn-ghost" onClick={toggleMenu}>
+                <EllipsisVertical className="w-6 h-6 text-black" />
+              </button>
+
+              {/* Dropdown menu */}
+              {isMenuOpen && (
+                <ul className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-48 absolute right-0 top-full">
+                  <li>
+                    <a className="text-error text-sm">
+                      <TriangleAlert className="w-4 h-4" /> Report User
+                    </a>
+                  </li>
+                  <li>
+                    <a className="text-error text-sm">
+                      <Lock className="w-4 h-4" /> Block User
+                    </a>
+                  </li>
+                </ul>
+              )}
             </div>
           </div>
         ) : (
@@ -51,7 +95,6 @@ function ChatPanel() {
           {/* {!user ? <NoChatSelected /> : <Messages />} */}
           <Messages />
         </div>
-        <TypingIndicator />
         <Typesend />
       </div>
     </div>

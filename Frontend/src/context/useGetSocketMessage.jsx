@@ -24,10 +24,6 @@ const useGetSocketMessage = () => {
     const handleNewMessage = async (newMessage) => {
       // If the message is for the current user
       if (newMessage.receiverId === authUser.user._id) {
-        // Play notification sound
-        const notification = new Audio(sound);
-        notification.play();
-
         // If the message is from the currently selected user
         if (user && newMessage.senderId === user._id) {
           dispatch(setMessage([...messages, newMessage]));
@@ -38,7 +34,9 @@ const useGetSocketMessage = () => {
             console.error("Error marking message as read:", error);
           }
         } else {
-          // Increment unread count for the sender
+          // Play notification sound and increment unread count only if not in the conversation
+          const notification = new Audio(sound);
+          notification.play();
           dispatch(incrementUnreadCount(newMessage.senderId));
         }
       }

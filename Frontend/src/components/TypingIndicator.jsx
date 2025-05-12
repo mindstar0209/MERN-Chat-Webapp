@@ -36,11 +36,7 @@ function TypingIndicator() {
 
   if (!isTyping) return null;
 
-  return (
-    <div className="text-sm text-gray-500 italic px-4 py-1">
-      {user?.fullName} is typing...
-    </div>
-  );
+  return <div className="text-xs text-info italic">typing ...</div>;
 }
 
 export default TypingIndicator;

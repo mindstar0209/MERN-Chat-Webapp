@@ -4,7 +4,7 @@ import FavIcon from "../assets/favicon.svg";
 export default function Header() {
   return (
     <>
-      <div className="flex bg-[#19b5fed9] p-6 items-center w-full h-[12vh] gap-4">
+      <div className="flex bg-[#19b5fe] p-6 items-center w-full h-[12vh] gap-4">
         <div className="w-[70px]">
           <img src={FavIcon} alt="icon" />
         </div>

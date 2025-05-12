@@ -11,7 +11,10 @@ const useSendMessage = () => {
   const { user } = useSelector(
     (state) => state.conversation.selectedConversation
   );
+
   const sendMessages = async (message) => {
+    if (!message.trim() || !user?._id) return;
+
     setLoading(true);
     const authUser = JSON.parse(localStorage.getItem("Auth"));
 
@@ -25,20 +28,20 @@ const useSendMessage = () => {
       __v: 0,
     };
 
+    // Optimistic update
     dispatch(setMessage([...messages, messageObj]));
+
     try {
-      await axiosInstance
-        .post(`/message/send/${user._id}`, { message })
-        .then((res) => {
-          console.log("res.Data:", res.data);
-        });
-      // setMessage([...messages, res.data]);
+      await axiosInstance.post(`/message/send/${user._id}`, { message });
       setLoading(false);
     } catch (error) {
       console.log("Error in send messages", error);
+      // Remove the optimistic update if the message failed to send
+      dispatch(setMessage(messages));
       setLoading(false);
     }
   };
+
   return { loading, sendMessages };
 };
 

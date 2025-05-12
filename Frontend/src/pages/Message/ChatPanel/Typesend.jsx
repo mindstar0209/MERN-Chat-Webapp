@@ -9,6 +9,7 @@ import {
 import axiosInstance from "../../../utils/axios";
 import useGetChatUsers from "../../../context/userGetChatUsers";
 import { useSocketContext } from "../../../context/SocketContext";
+import TypingIndicator from "../../../components/TypingIndicator";
 
 function Typesend() {
   const dispatch = useDispatch();
@@ -64,7 +65,6 @@ function Typesend() {
     <form onSubmit={handleSubmit}>
       <div className="flex space-x-1 h-[55px]">
         <div className="relative w-full h-full">
-          {/* User is typing */}
           <div className="bg-stone-200 p-2 absolute bottom-0 left-0 w-full flex">
             <textarea
               ref={textareaRef}
